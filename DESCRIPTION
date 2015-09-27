@@ -1,0 +1,10 @@
+Package: gyro
+Type: Package
+Title: gyro: Genomic utility wrappers in R
+Version: 0.1
+Date: 2015-09-27
+Author: Daniel Vera vera@genomics.fsu.edu
+Maintainer: Daniel Vera <vera@genomics.fsu.edu>
+Description: A suite of wrapper scripts to process, analyze, and visualize genomic data in R.
+Depends: parallel, tools, gtools
+License: MIT Lisence

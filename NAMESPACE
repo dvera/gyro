@@ -1,0 +1,6 @@
+exportPattern("^[[:alpha:]]+")
+
+import(gtools)
+import(parallel)
+import(tools)
+export(mclapply)
