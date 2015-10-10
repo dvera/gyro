@@ -28,7 +28,7 @@ function( bed1, bed2, strand=TRUE, threads=getOption("threads",1L) ){
 		"cut -f 1,2,3 ",bed1,
 		" | bedtools closest -t first -a stdin -b ",bed2,
 		" | cut -f 1,2,3,7",if(strand){paste0(",8,9")},
-		" > ",outname
+		" > ", outname
 	)
 
 	res <- rage.run(cmdString, threads=threads)
