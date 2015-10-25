@@ -25,7 +25,7 @@ function( bedFiles , windowfile , windowsize=25 , stepsize=windowsize , scalar="
 
 	#calculate scaling factor
 	if(scalar=="rpm"){
-		scalar=1000000/filelines(bedFiles,threads=threads,quiet=TRUE)
+		scalar=1000000 / filelines( bedFiles, threads=threads, quiet=TRUE )
 	}
 
 	#calculate coverage over windowfile
