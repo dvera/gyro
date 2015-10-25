@@ -11,7 +11,7 @@ featureCounts <- function( alignments , annotation , outname , pairCounts=FALSE 
     "-T", threads,
     "-s", stranded,
     if(pairCounts){"-p"},
-    if(!is.null(pairInsertRange)){paste("-P","-d",pairInsertRange[1],"-D",pairInsertRange[2]},
+    if(!is.null(pairInsertRange)){paste("-P","-d",pairInsertRange[1],"-D",pairInsertRange[2])},
     if(pairAlignmentRequired){"-B"},
     if(ignoreDup){"--ignoreDup"},
     if(promiscuousReads){"-O"},
