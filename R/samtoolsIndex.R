@@ -10,6 +10,6 @@ function( bamFiles , threads=getOption("threads",1L) ){
 
 	cmdString <- paste("samtools index",bamFiles)
 
-	res <- rage.run(cmdString,threads)
+	res <- cmdRun(cmdString,threads)
 
 }

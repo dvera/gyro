@@ -33,7 +33,7 @@ function( read1files, index, read2files=NULL, outnames=NULL, strandedness="unstr
 		"-S",outnames
 	)
 
-	rage.run(cmdString, threads=1)
+	cmdRun(cmdString, threads=1)
 
 	return(outnames)
 }

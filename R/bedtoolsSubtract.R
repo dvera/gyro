@@ -20,11 +20,11 @@ function( a, b, extraargs="", header=TRUE, count=FALSE, threads=getOption("threa
 
 	if(count){
 		cmdString<-paste("bedtools subtract",extraargs,if(header){"-header"},"-a",a,"-b",b,"| wc -l")
-		res <- rage.run(cmdString, threads, intern=TRUE)
+		res <- cmdRun(cmdString, threads, intern=TRUE)
 		return(res)
 	} else{
 		cmdString<-paste("bedtools subtract",extraargs,if(header){"-header"},"-a",a,"-b",b,">",outname)
-		res <- rage.run(cmdString, threads)
+		res <- cmdRun(cmdString, threads)
 		return(outname)
 	}
 

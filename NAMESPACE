@@ -1,5 +1,6 @@
 exportPattern("^[[:alpha:]]+")
 
+import(conifur)
 import(gtools)
 import(parallel)
 import(tools)

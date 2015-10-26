@@ -45,7 +45,7 @@ function( bedFiles , windowfile , windowsize=25 , stepsize=windowsize , scalar="
 		outname
 	))
 
-	res<-rage.run(cmdString, threads)
+	res<-cmdRun(cmdString, threads)
 
 	return(outname)
 }

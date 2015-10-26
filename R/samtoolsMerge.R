@@ -17,7 +17,7 @@ samtoolsMerge <- function( bamFiles , outname , threads=getOption("threads",1L) 
     paste(bamFiles, collapse=" ")
   )
 
-  res <- rage.run(cmdString)
+  res <- cmdRun(cmdString)
 
   return(outname)
 }

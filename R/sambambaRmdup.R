@@ -13,7 +13,7 @@ function( bamFiles, singleEnd=FALSE , pairedAsSingle=FALSE, threads=getOption("t
   )
 
   # print and execute command string
-  res <- rage.run( cmdString, threads=threads )
+  res <- cmdRun( cmdString, threads=threads )
 
   return(outnames)
 

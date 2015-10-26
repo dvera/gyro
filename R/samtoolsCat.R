@@ -11,7 +11,7 @@ samtoolsCat <- function( bamFiles , outname ){
 
 	cmdString <- paste("samtools cat -o" , outname , paste(bamFiles, collapse=" ") )
 
-	res <- rage.run(cmdString)
+	res <- cmdRun(cmdString)
 
 	return(outname)
 

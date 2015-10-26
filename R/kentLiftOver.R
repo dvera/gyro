@@ -9,7 +9,7 @@ kentLiftOver <- function( beds, chainfile, suffix , threads=getOption("threads",
 
 	cmdString <- paste( "liftOver", beds, chainfile, outnames, unmapped )
 
-	rage.run( cmdString , threads )
+	cmdRun( cmdString , threads )
 
 	return(outnames)
 

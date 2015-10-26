@@ -50,7 +50,7 @@ bcftoolsCall <- function( bcfFiles , outputType="v" , consensusCaller=TRUE , mul
     outnames
     )
 
-    res <- rage.run(cmdString,threads)
+    res <- cmdRun(cmdString,threads)
 
     return(outnames)
 

@@ -23,6 +23,6 @@ bedtoolsMerge <- function( bedFiles, flank=0, scorecol=5, operation="none", stra
   outnames<-paste(basename(removeext(bedFiles)),"_merged",suffix,".",ext,sep="")
 
   cmdString <- paste("bedtools merge -d",flank,if(strand){"-s"},moreargs,"-i",bedFiles,">",outnames)
-  res <- rage.run(cmdString,threads)
+  res <- cmdRun(cmdString,threads)
   return(outnames)
 }

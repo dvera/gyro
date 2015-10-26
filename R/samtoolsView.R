@@ -58,7 +58,7 @@ samtoolsView <- function( inFiles , outnames = NA , regions=NULL , genome.chrom.
   )
 
   # print and execute command string
-  res <- rage.run(cmdString,threads,intern=if(count){TRUE}else{FALSE})
+  res <- cmdRun(cmdString,threads,intern=if(count){TRUE}else{FALSE})
 
   if(count){
     return(res)

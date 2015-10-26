@@ -35,6 +35,6 @@ function( bedFiles, genomefile , covmode="-bg" , scalar="rpm", bam=FALSE, blocks
 		pipes,
 		">",outnames
 	)
-	rage.run(cmdString,threads)
+	cmdRun(cmdString,threads)
 	return(outnames)
 }

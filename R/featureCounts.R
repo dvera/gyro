@@ -19,7 +19,7 @@ featureCounts <- function( alignments , annotation , outname , pairCounts=FALSE 
     paste(alignments,collapse=" ")
   )
 
-  res <- rage.run(cmdString)
+  res <- cmdRun(cmdString)
 
   return(outname)
 }

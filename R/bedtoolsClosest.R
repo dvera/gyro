@@ -31,7 +31,7 @@ function( bed1, bed2, strand=TRUE, threads=getOption("threads",1L) ){
 		" > ", outname
 	)
 
-	res <- rage.run(cmdString, threads=threads)
+	res <- cmdRun(cmdString, threads=threads)
 
 	return(outname)
 

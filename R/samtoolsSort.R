@@ -31,7 +31,7 @@ function( bamFiles, outputFormat="bam" , sortThreads=1 , threads=getOption("thre
 	)
 
 	# print and execute command string
-	res<-rage.run(cmdString,threads)
+	res<-cmdRun(cmdString,threads)
 
 	return(outnames)
 

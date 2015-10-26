@@ -34,7 +34,7 @@ macsCallpeak <- function ( treatmentFiles , controlFiles=NULL , genomeSize = "hs
 			"-B"
 		)
 
-	res<-rage.run(cmdString,threads)
+	res<-cmdRun(cmdString,threads)
 
 	peaknames <- paste0( sampleNames, "_peaks.narrowPeak" )
 	if(threads <= 2){

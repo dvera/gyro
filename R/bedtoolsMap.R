@@ -32,6 +32,6 @@ function( bgFiles, windows , operation="mean" , outnames = NULL , windowsize=25,
 		if( stepsize<windowsize ){ paste( "| awk '{print $1,$2","+",lsub,",$2+",lsub,"+",stepsize,",$4}' OFS='\t'" ) } ,
 		">" , outnames )
 
-	res <- rage.run(cmdString,threads)
+	res <- cmdRun(cmdString,threads)
 	return(outnames)
 }

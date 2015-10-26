@@ -35,6 +35,6 @@ function( bamFiles , bedfile , outname , split=FALSE , samestrand=FALSE , diffst
 		outname
 	))
 
-	res<-rage.run(cmdString)
+	res<-cmdRun(cmdString)
 	return(outname)
 }
