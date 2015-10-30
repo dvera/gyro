@@ -29,15 +29,9 @@ bams <- samtoolsView(sams,minQual=10)
 beds <- bamToBed(bams)
 bgs  <- bedtoolsGenomeCov(beds,genome)
 bws  <- bedGraphToBigWig(bgs,genome)
-
-
-
-
 ```
 
 ## Installation
-
-A given program must be installed and available in your $PATH in order to use a gyro script that calls the program. A complete list of programs is tabulated below.
 
 Install devtools if not installed already:
 ```R
@@ -56,7 +50,7 @@ devtools::install_github("dvera/converge")
 devtools::install_github("dvera/rubber")
 ```
 
-## List of wrapper scripts
+A given program must be installed and available in your $PATH in order to use a gyro script that calls the program. A complete list of programs is tabulated below:
 
 |program                  | gyro function name  |
 |-------------------------|---------------------|
