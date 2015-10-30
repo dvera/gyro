@@ -6,7 +6,7 @@ R wrapper scripts for genomic tools
 
 ## Overview
 
-gyro provides a set of wrapper scripts for executing popular command-line genomic tools from R. Gyro currently only supports Linux-based systems because of it's use of shell pipes and redirection.
+gyro provides a set of wrapper scripts for executing popular command-line genomic tools from R. Gyro currently only supports Linux-based systems because of it's use of shell pipes and redirection. It may also require the shell R is run in to be bash.
 
 ## Why?
 
