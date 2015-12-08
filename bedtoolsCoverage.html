@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Calculate coverage of a set of bed files over intervals in a...</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for bedtoolsCoverage"><tr><td>bedtoolsCoverage</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Calculate coverage of a set of bed files over intervals in a single bed file.</h2>
+
+<h3>Description</h3>
+
+<p><code>bedtoolsCoverage</code> is a wrapper for <code>bedtools intersect -c</code>.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+bedtoolsCoverage(bedFiles, windowfile, windowsize = 25,
+  stepsize = windowsize, scalar = "rpm", threads = getOption("threads",
+  1L))
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>bedFiles</code></td>
+<td>
+<p>A character vector of paths to bed files.</p>
+</td></tr>
+<tr valign="top"><td><code>windowfile</code></td>
+<td>
+<p>A string specifying the path to the bed file within which to calculate coverage of beds.</p>
+</td></tr>
+<tr valign="top"><td><code>windowsize</code></td>
+<td>
+<p>Positive integer indicating size of windows used to resize overlapping windows to comply with bedGraph format restriction against overlapping intervals. This only needs to be specified if windows are overlapping and a bedGraph-compliant file is desired.</p>
+</td></tr>
+<tr valign="top"><td><code>stepsize</code></td>
+<td>
+<p>Positive integer indicating size of the steps used to resize overlapping windows to comply with bedGraph format restriction against overlapping intervals. This only needs to be specified if windows are overlapping and a bedGraph-compliant file is desired.</p>
+</td></tr>
+<tr valign="top"><td><code>scalar</code></td>
+<td>
+<p>A number to multiply the read counts by. If &quot;rpm&quot;, the read counts will be multiplied by a 1000000/(number of reads) to yield reads-per-million (rpm).</p>
+</td></tr>
+<tr valign="top"><td><code>threads</code></td>
+<td>
+<p>A positive integer specifying how many samples to process simultaneously.</p>
+</td></tr>
+</table>
+
+
+</body></html>

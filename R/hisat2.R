@@ -1,4 +1,4 @@
-hisat <-
+hisat2 <-
 function( read1files, index, read2files=NULL, outnames=NULL, strandedness="unstranded", threads=getOption("threads",1L) ){
 
 	library(parallel)
@@ -21,7 +21,7 @@ function( read1files, index, read2files=NULL, outnames=NULL, strandedness="unstr
 
 
 	cmdString <- paste(
-		"hisat",
+		"hisat2",
 		"-p",threads,
 		"-x",index,
 		"--rna-strandness",strandedness,
