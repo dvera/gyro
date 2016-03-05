@@ -52,16 +52,15 @@ samtoolsView <- function( inFiles , outnames = NA , regions=NULL , genome.chrom.
     if( !is.null(regions) & !oneRegion ){ paste( regionString ) },
     inFiles,
     if( oneRegion ){ theRegion },
-    if( postsort ){ paste( "| samtools sort -T",outnames,"-o",outnames,"-" ) },
-    ">",
-    outnames
+    if( postsort ){ paste( "| samtools sort -T",outnames,"-o",outnames,if(outputBam){paste("-O bam")} else{paste("-O sam")},"-" ) },
+    if(!count){paste(">", outnames)} else{}
   )
 
   # print and execute command string
   res <- cmdRun(cmdString,threads,intern=if(count){TRUE}else{FALSE})
 
   if(count){
-    return(res)
+    return(as.numeric(unlist(res)))
   } else{
     return(outnames)
   }

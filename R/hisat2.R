@@ -1,5 +1,5 @@
 hisat2 <-
-function( read1files, index, read2files=NULL, outnames=NULL, strandedness="unstranded", threads=getOption("threads",1L) ){
+function( read1files, index, read2files=NULL, outnames=NULL, strandedness=NULL, threads=getOption("threads",1L) ){
 
 	library(parallel)
 	if(threads=="max"){threads<-detectCores()-1}
@@ -15,6 +15,7 @@ function( read1files, index, read2files=NULL, outnames=NULL, strandedness="unstr
 
 	if(is.null(outnames)){
 		outnames <- paste0(basename(removeext(read1files)),".sam")
+		lognames <- paste0(basename(removeext(read1files)),".sam.log")
 	} else{
 		if(numfiles != length(outnames)){stop("outnames and number of input files must be same length")}
 	}
@@ -24,13 +25,14 @@ function( read1files, index, read2files=NULL, outnames=NULL, strandedness="unstr
 		"hisat2",
 		"-p",threads,
 		"-x",index,
-		"--rna-strandness",strandedness,
+		if(!is.null(strandedness)){paste("--rna-strandness",strandedness)},
 		if(paired){
 			paste("-1",read1files,"-2",read2files)
 		} else{
 			paste("-U",read1files)
 		},
-		"-S",outnames
+		"-S",outnames,
+		"2>",lognames
 	)
 
 	cmdRun(cmdString, threads=1)

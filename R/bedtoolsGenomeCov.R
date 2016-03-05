@@ -15,7 +15,7 @@ function( bedFiles, genomefile , covmode="-bg" , scalar="rpm", bam=FALSE, blocks
 	outnames<-paste0(basename(removeext(bedFiles)),".bg")
 
 	if(scalar=="rpm" & bam == FALSE){scalar<-1000000/filelines(bedFiles)}
-	if(scalar=="rpm" & bam == TRUE){scalar<-1000000/bam.count(bedFiles)}
+	if(scalar=="rpm" & bam == TRUE){scalar<-1000000/samtoolsView(bedFiles,count=T)}
 
 	if(covmode=="-d"){pipes<-"| awk '{print $1,$2,$2+1,$3}' OFS='\t'"}
 	if(covmode=="-dz"){pipes<-"| awk '{print $1,$2+1,$2+2,$3}' OFS='\t'"}
