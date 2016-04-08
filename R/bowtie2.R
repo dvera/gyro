@@ -1,9 +1,6 @@
 bowtie2 <-
-function( read1files, indexfile , read2files=NULL,cores="max", alignMode="end-to-end",input="-q", all=FALSE , dovetail=FALSE , discordant=FALSE , mixed=FALSE , unaligned=TRUE , maxInsertSize=500 , minInsertSize=0 , appendIndexToName=FALSE , reorder=FALSE ){
+function( read1files, indexfile , read2files=NULL,threads=getOption("threads",1L), alignMode="end-to-end",input="-q", all=FALSE , dovetail=FALSE , discordant=FALSE , mixed=FALSE , unaligned=TRUE , maxInsertSize=500 , minInsertSize=0 , appendIndexToName=FALSE , reorder=FALSE, extraargs="" ){
 
-	library(parallel)
-	if(cores=="max"){cores<-detectCores()-1}
-	#if(cores > length(read1files)) { cores <- length(read1files) }
 
 	read1names<-basename(removeext(read1files))
 	if(appendIndexToName){ read1names=paste0(read1names,"_",basename(indexfile)) }
@@ -19,8 +16,9 @@ function( read1files, indexfile , read2files=NULL,cores="max", alignMode="end-to
 	if(paired==TRUE){
 		cmdString <- paste(
 			"bowtie2",
+			extraargs,
 			paste0("--",alignMode),
-			"-p",cores,
+			"-p",threads,
 			if(dovetail){"--dovetail"},
 			if(mixed==FALSE){"--no-mixed"},
 			if(discordant==FALSE){"--no-discordant"},
@@ -39,8 +37,9 @@ function( read1files, indexfile , read2files=NULL,cores="max", alignMode="end-to
 	}	else{
 		cmdString <- paste(
 			"bowtie2",
+			extraargs,
 			paste0("--",alignMode),
-			"-p",cores,
+			"-p",threads,
 			if(unaligned==FALSE){"--no-unal"},
 			if(reorder){"--reorder"},
 			if(all){"-a"},

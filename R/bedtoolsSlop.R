@@ -1,11 +1,13 @@
 bedtoolsSlop <-
-function( bedFiles, genomefile, expandleft=0, expandright=0, strand = FALSE, threads=getOption("threads",1L) ){
+function( bedFiles, chromsizes, expandleft=0, expandright=0, strand = FALSE, threads=getOption("threads",1L) ){
 
-	if(missing(genomefile)){
-		genomefile=getOption("genomefile")
+
+	if(missing(chromsizes)){
+		chromsizes<-getOption("chromsizes",NULL)
+		if(is.null(chromsizes)){stop("must define file contain chromosome sizes")}
 	}
-	if(is.null(genomefile)){
-		stop("genomefile must exist")
+	if(!file.exists(chromsizes)){
+		stop("chromsizes file does not exist")
 	}
 
 	bedname<-basename(removeext(bedFiles))
@@ -19,7 +21,7 @@ function( bedFiles, genomefile, expandleft=0, expandright=0, strand = FALSE, thr
 		"bedtools slop",
 		if(strand){"-s"} ,
 		"-i",bedFiles,
-		"-g",genomefile,
+		"-g",chromsizes,
 		"-l",expandleft,
 		"-r",expandright,
 		">",outnames

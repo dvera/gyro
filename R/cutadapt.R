@@ -1,8 +1,9 @@
+#@param 
+
 cutadapt <-
-function( fastq1 , fastq2=NULL , adapter = "AGATCGGAA" , qualityCutoff=20 , minLength = 30 , minOverlap=1  , clipFromStart=NULL , clipFromEnd=NULL , cores="max" ){
-  library(parallel)
-  if(cores=="max"){cores=detectCores()-1}
-  if(length(fastq1) < cores){cores=length(fastq1)}
+function( fastq1 , fastq2=NULL , adapter = "AGATCGGAA" , qualityCutoff=0 , minLength = 0 , minOverlap=1  , clipFromStart=NULL , clipFromEnd=NULL , threads=getOption("threads",1L) ){
+
+  if( minLength>0 | qualityCutoff>0){filt=TRUE}else{filt=FALSE}
 
   outnamesLeft1<-paste0(basename(removeext(fastq1)),"_clip_tmp.fastq")
   outnamesRight1<-paste0(basename(removeext(fastq2)),"_clip_tmp.fastq")
@@ -11,47 +12,63 @@ function( fastq1 , fastq2=NULL , adapter = "AGATCGGAA" , qualityCutoff=20 , minL
   logNames<-paste0(basename(removeext(fastq1)),"_clip.log")
 
 
-  cmdString1<-paste(
-    "cutadapt",
-    if(!is.null(clipFromStart)){"-u"},
-    if(!is.null(clipFromStart)){abs(clipFromStart)},
-    if(!is.null(clipFromEnd)){"-u"},
-    if(!is.null(clipFromEnd)){-abs(clipFromEnd)},
-    "-O",minOverlap,
-    "-q",qualityCutoff,
-    "-a",adapter,
-    "-m",minLength,
-    "-o",outnamesLeft1,
-    "-p",outnamesRight1,fastq1,fastq2,
-    ">",logNames
-  )
+  if(filt){
 
-  cmdString2<-paste(
-    "cutadapt",
-    if(!is.null(clipFromStart)){"-u"},
-    if(!is.null(clipFromStart)){abs(clipFromStart)},
-    if(!is.null(clipFromEnd)){"-u"},
-    if(!is.null(clipFromEnd)){-abs(clipFromEnd)},
-    "-O",minOverlap,
-    "-q",qualityCutoff,
-    "-a",adapter,
-    "-m",minLength,
-    "-o",outnamesRight2,
-    "-p",outnamesLeft2,outnamesRight1,outnamesLeft1,
-    ">>",logNames
-  )
+    cmdString1<-paste(
+      "cutadapt",
+      if(!is.null(clipFromStart)){"-u"},
+      if(!is.null(clipFromStart)){abs(clipFromStart)},
+      if(!is.null(clipFromEnd)){"-u"},
+      if(!is.null(clipFromEnd)){-abs(clipFromEnd)},
+      "-O",minOverlap,
+      "-q",qualityCutoff,
+      "-a",adapter,
+      "-A",adapter,
+      "-m",minLength,
+      "-o",outnamesLeft1,
+      "-p",outnamesRight1,fastq1,fastq2,
+      ">",logNames
+    )
 
-  a<-mclapply(1:length(fastq1) , function(x){
-    print(cmdString1[x])
-    system(cmdString1[x])
-  }, mc.cores=cores , mc.preschedule=F)
+    cmdString2<-paste(
+      "cutadapt",
+      if(!is.null(clipFromStart)){"-u"},
+      if(!is.null(clipFromStart)){abs(clipFromStart)},
+      if(!is.null(clipFromEnd)){"-u"},
+      if(!is.null(clipFromEnd)){-abs(clipFromEnd)},
+      "-O",minOverlap,
+      "-q",qualityCutoff,
+      "-a",adapter,
+      "-A",adapter,
+      "-m",minLength,
+      "-o",outnamesRight2,
+      "-p",outnamesLeft2,outnamesRight1,outnamesLeft1,
+      ">>",logNames
+    )
 
-  b<-mclapply(1:length(fastq1) , function(x){
-    print(cmdString2[x])
-    system(cmdString2[x])
-  }, mc.cores=cores , mc.preschedule=F)
+    res <- cmdRun(cmdString1,threads=threads)
+
+  } else{
+    cmdString2<-paste(
+      "cutadapt",
+      if(!is.null(clipFromStart)){"-u"},
+      if(!is.null(clipFromStart)){abs(clipFromStart)},
+      if(!is.null(clipFromEnd)){"-u"},
+      if(!is.null(clipFromEnd)){-abs(clipFromEnd)},
+      "-a",adapter,
+      "-A",adapter,
+      "-m",minLength,
+      "-o",outnamesLeft2,
+      "-p",outnamesRight2,
+      fastq1,fastq2,
+      ">",logNames
+    )
+  }
+
+  res <- cmdRun(cmdString2,threads=threads)
 
   unlink(c(outnamesLeft1,outnamesRight1))
 
-  return(list(outnamesLeft1,outnamesLeft2))
+  return(list(outnamesLeft2,outnamesRight2))
+
 }

@@ -10,8 +10,17 @@
 #' @param threads A positive integer specifying how many samples to process simultaneously.
 
 bedtoolsGenomeCov <-
-function( bedFiles, genomefile , covmode="-bg" , scalar="rpm", bam=FALSE, blocks=FALSE , threads=getOption("threads",1L) ){
+function( bedFiles, chromsizes , covmode="-bg" , scalar="rpm", bam=FALSE, blocks=FALSE , threads=getOption("threads",1L) ){
 
+	if(missing(chromsizes)){
+		chromsizes<-getOption("chromsizes",NULL)
+		if(is.null(chromsizes)){stop("must define file contain chromosome sizes")}
+	}
+	if(!file.exists(chromsizes)){
+		stop("chromsizes file does not exist")
+	}
+
+	options(scipen=9999)
 	outnames<-paste0(basename(removeext(bedFiles)),".bg")
 
 	if(scalar=="rpm" & bam == FALSE){scalar<-1000000/filelines(bedFiles)}
@@ -27,7 +36,7 @@ function( bedFiles, genomefile , covmode="-bg" , scalar="rpm", bam=FALSE, blocks
 	cmdString<-paste(
 		"bedtools genomecov",
 		covmode,
-		"-g",genomefile,
+		"-g",chromsizes,
 		"-scale",scalar,
 		if(blocks){"-split"},
 		inputarg,
