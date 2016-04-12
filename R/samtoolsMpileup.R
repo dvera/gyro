@@ -1,5 +1,5 @@
 samtoolsMpileup <-
-function( bamFiles, fastaRef , minMQ=0 , minBQ=13 , maxDepth=250 , regions=NULL , redoBaq=FALSE , noBaq=FALSE , adjustMQ=0 , uncompressed=TRUE ){
+function( bamFiles, fastaRef , minMQ=0 , minBQ=13 , maxDepth=250 , regions=NULL , redoBaq=FALSE , noBaq=FALSE , adjustMQ=0 , uncompressed=TRUE , countOrphans=FALSE , vcf=FALSE , threads=getOption("threads",1L) ){
 
   if( !is.null(regions) ){
     if(file.exists(regions)){
@@ -22,7 +22,7 @@ function( bamFiles, fastaRef , minMQ=0 , minBQ=13 , maxDepth=250 , regions=NULL 
     if(noBaq){"B"},
     if(!is.null(regions)){"_"},
     if(!is.null(regions)){regionSuffix},
-    ".bcf"
+    if(vcf){".vcf"}else{".bcf"}
   )
 
   # generate command strings
@@ -32,8 +32,10 @@ function( bamFiles, fastaRef , minMQ=0 , minBQ=13 , maxDepth=250 , regions=NULL 
     "-Q", minBQ,
     "-d", maxDepth,
     "-C", adjustMQ,
+    if(countOrphans){ "-A" },
     if(redoBaq){ "-E" },
     if(noBaq){ "-B" },
+    if(vcf){ "-v" },
     if(uncompressed){ "-u" },
     if( !is.null(regions) ){ regionString },
     "-f", fastaRef,
@@ -43,10 +45,7 @@ function( bamFiles, fastaRef , minMQ=0 , minBQ=13 , maxDepth=250 , regions=NULL 
   )
 
   # print and execute command string
-  for( i in 1:length(bamFiles) ){
-    print(cmdString[i])
-    system(cmdString[i])
-  }
+  res <- cmdRun(cmdString,threads=threads)
 
   return(outnames)
 

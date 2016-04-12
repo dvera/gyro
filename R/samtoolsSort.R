@@ -23,10 +23,10 @@ function( bamFiles, outputFormat="bam" , sortThreads=1 , threads=getOption("thre
 		if( !is.na(memory) ){ paste( "-m" , memory ) },
 		if( !is.na(threads) ){ paste( "-@" , sortThreads ) },
 		if(sortByName){"-n"},
-		"-T",outnames,
+		"-T",paste0(outnames,"_tmp"),
 		"-O",outputFormat,
 		bamFiles,
-		">",
+		"-o",
 		outnames
 	)
 
