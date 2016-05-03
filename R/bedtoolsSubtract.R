@@ -10,13 +10,22 @@
 
 
 bedtoolsSubtract <-
-function( a, b, extraargs="", header=TRUE, count=FALSE, threads=getOption("threads",1L) ){
+function( a, b, outname , extraargs="", header=TRUE, count=FALSE, threads=getOption("threads",1L) ){
+
 
 	bed1name<-basename(removeext(a))
 	bed2name<-basename(removeext(b))
 	ext<-file_ext(a)
 
-	outname<-paste0(bed1name,"_minus_",bed2name,".",ext)
+
+	if(missing(outname)){
+    outname<-paste0(bed1name,"_minus_",bed2name,".",ext)
+  } else{
+    if(length(outname) != length(a)){stop("length of outnames must match length of bedfiles")}
+  }
+
+
+
 
 	if(count){
 		cmdString<-paste("bedtools subtract",extraargs,if(header){"-header"},"-a",a,"-b",b,"| wc -l")

@@ -38,9 +38,9 @@ macsCallpeak <- function ( treatmentFiles , controlFiles=NULL , genomeSize = "hs
 
 	peaknames <- paste0( sampleNames, "_peaks.narrowPeak" )
 	if(threads <= 2){
-		np <- unlist(lapply(peaknames, np.2.bed  ))
+		np <- unlist(lapply(peaknames, narrowPeakToBed  ))
 	} else{
-		np <- unlist(mclapply(peaknames, np.2.bed , mc.cores=threads))
+		np <- unlist(mclapply(peaknames, narrowPeakToBed , mc.cores=threads))
 	}
 
 
