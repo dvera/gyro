@@ -66,7 +66,7 @@ function( fastq1 , fastq2=NULL , adapter = "AGATCGGAA" , qualityCutoff=0 , minLe
       if(!is.null(clipFromEnd)){"-u"},
       if(!is.null(clipFromEnd)){-abs(clipFromEnd)},
       "-a",adapter,
-      if(!is.null(fastq2)){"-A",adapter},
+      if(!is.null(fastq2)){paste("-A",adapter)},
       "-m",minLength,
       "-o",outnamesLeft2,
       if(!is.null(fastq2)){paste("-p",outnamesRight2)},
