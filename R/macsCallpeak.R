@@ -14,7 +14,7 @@
 #' @param threads A positive integer specifying how many samples to process simultaneously.
 
 
-macsCallpeak <- function ( treatmentFiles , controlFiles=NULL , genomeSize = "hs" , inputFormat = "AUTO" , noLambda=TRUE , sampleNames = NULL , callSummits = TRUE , qvalue = 0.01 , verbosity = 3 , threads=getOption("threads",1L) ){
+macsCallpeak <- function ( treatmentFiles , controlFiles=NULL , genomeSize = "hs" , inputFormat = "AUTO" , noLambda=TRUE , sampleNames = NULL , callSummits = TRUE , qvalue = 0.01 , verbosity = 3 , threads=getOption("threads",1L) , keepDuplicates=1 ){
 
 	# create output name string
 	if( is.null( sampleNames ) ){ sampleNames = basename( removeext( treatmentFiles ) ) }
@@ -30,6 +30,7 @@ macsCallpeak <- function ( treatmentFiles , controlFiles=NULL , genomeSize = "hs
 			if(callSummits){ "--call-summits" },
 			"-q",qvalue,
 			"-f",inputFormat,
+			"--keep-dup",keepDuplicates,
 			"--verbose",verbosity,
 			"-B"
 		)

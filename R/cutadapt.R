@@ -1,15 +1,25 @@
-#@param 
+#@param
 
 cutadapt <-
 function( fastq1 , fastq2=NULL , adapter = "AGATCGGAA" , qualityCutoff=0 , minLength = 0 , minOverlap=1  , clipFromStart=NULL , clipFromEnd=NULL , threads=getOption("threads",1L) ){
 
   if( minLength>0 | qualityCutoff>0){filt=TRUE}else{filt=FALSE}
 
-  outnamesLeft1<-paste0(basename(removeext(fastq1)),"_clip_tmp.fastq")
-  outnamesRight1<-paste0(basename(removeext(fastq2)),"_clip_tmp.fastq")
-  outnamesLeft2<-paste0(basename(removeext(fastq1)),"_clip.fastq")
-  outnamesRight2<-paste0(basename(removeext(fastq2)),"_clip.fastq")
-  logNames<-paste0(basename(removeext(fastq1)),"_clip.log")
+
+  if( all(file_ext(fastq1)=="gz") & all(file_ext(removeext(fastq1))=="fastq")){
+    outnamesLeft1<-paste0(basename(removeext(removeext(fastq1))),"_clip_tmp.fastq")
+    outnamesRight1<-paste0(basename(removeext(removeext(fastq2))),"_clip_tmp.fastq")
+    outnamesLeft2<-paste0(basename(removeext(removeext(fastq1))),"_clip.fastq")
+    outnamesRight2<-paste0(basename(removeext(removeext(fastq2))),"_clip.fastq")
+    logNames<-paste0(outnamesLeft2,".log")
+  } else{
+    outnamesLeft1<-paste0(basename(removeext(fastq1)),"_clip_tmp.fastq")
+    outnamesRight1<-paste0(basename(removeext(fastq2)),"_clip_tmp.fastq")
+    outnamesLeft2<-paste0(basename(removeext(fastq1)),"_clip.fastq")
+    outnamesRight2<-paste0(basename(removeext(fastq2)),"_clip.fastq")
+    logNames<-paste0(outnamesLeft2,".log")
+  }
+
 
 
   if(filt){
@@ -56,11 +66,12 @@ function( fastq1 , fastq2=NULL , adapter = "AGATCGGAA" , qualityCutoff=0 , minLe
       if(!is.null(clipFromEnd)){"-u"},
       if(!is.null(clipFromEnd)){-abs(clipFromEnd)},
       "-a",adapter,
-      "-A",adapter,
+      if(!is.null(fastq2)){"-A",adapter},
       "-m",minLength,
       "-o",outnamesLeft2,
-      "-p",outnamesRight2,
-      fastq1,fastq2,
+      if(!is.null(fastq2)){paste("-p",outnamesRight2)},
+      fastq1,
+      if(!is.null(fastq2)){fastq2},
       ">",logNames
     )
   }

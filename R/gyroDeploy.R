@@ -1,5 +1,5 @@
 
-deploy<-function(message="no message"){
+gyroDeploy<-function(message="no message"){
 	library(gyro)
 	res <- system(paste0("git -C /lustre/maize/home/dlv04c/software/r/gyro/ add /lustre/maize/home/dlv04c/software/r/gyro/ &&\
 	git -C /lustre/maize/home/dlv04c/software/r/gyro/ commit -a -m '",message,"' &&\

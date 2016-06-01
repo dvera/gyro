@@ -5,7 +5,7 @@ function( read1files, indexfile , read2files=NULL,threads=getOption("threads",1L
 	read1names<-basename(removeext(read1files))
 	if(appendIndexToName){ read1names=paste0(read1names,"_",basename(indexfile)) }
 	outnames<-paste0(read1names,".sam")
-	lognames <- paste0(read1names,".log")
+	lognames <- paste0(outnames,".log")
 
 	if(is.null(read2files)){
 		paired=FALSE
@@ -51,12 +51,7 @@ function( read1files, indexfile , read2files=NULL,threads=getOption("threads",1L
 		)
 	}
 
-	for( i in 1:length(read1files)){
-		print(cmdString[i])
-		system(cmdString[i])
-	}
-	#if(makebam) { outnames<-unlist(mclapply(outnames,sam.2.bam,mc.cores=cores,q=q)) }
-	#if(makebed) { outnames<-unlist(mclapply(outnames,bam.2.bed,if(paired){paired=TRUE} else{paired=FALSE},mc.cores=cores))}
+	res <- cmdRun(cmdSring,threads=1)
 
 	return(outnames)
 

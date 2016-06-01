@@ -47,7 +47,7 @@ devtools::install_github("dvera/gyro")
 The following R packages are recommended:
 ```R
 devtools::install_github("dvera/converge")
-devtools::install_github("dvera/rubber")
+devtools::install_github("dvera/travis")
 ```
 
 A given program must be installed and available in your $PATH in order to use a gyro script that calls the program. A complete list of programs is tabulated below:

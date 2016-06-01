@@ -30,7 +30,7 @@ function( bgFiles, windows , operation="mean" , outnames = NULL , windowsize=25,
 		"-b",bgFiles,
 		if(printzero==F){"| awk '$4!=0'"},
 		if( stepsize<windowsize ){ paste( "| awk '{print $1,$2","+",lsub,",$2+",lsub,"+",stepsize,",$4}' OFS='\t'" ) } ,
-		">" , outnames )
+		" | grep -v 'NA' >" , outnames )
 
 	res <- cmdRun(cmdString,threads)
 	return(outnames)
