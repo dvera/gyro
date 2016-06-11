@@ -10,7 +10,7 @@
 #' @param threads A positive integer specifying how many samples to process simultaneously.
 
 bedtoolsGenomeCov <-
-function( bedFiles, chromsizes , covmode="-bg" , scalar="rpm", bam=FALSE, blocks=FALSE , threads=getOption("threads",1L) ){
+function( bedFiles, chromsizes , covmode="-bg" , scalar="rpm", bam=FALSE, blocks=FALSE , bamInsertCov=FALSE , threads=getOption("threads",1L) ){
 
 	if(missing(chromsizes)){
 		chromsizes<-getOption("chromsizes",NULL)
@@ -39,6 +39,7 @@ function( bedFiles, chromsizes , covmode="-bg" , scalar="rpm", bam=FALSE, blocks
 		"-g",chromsizes,
 		"-scale",scalar,
 		if(blocks){"-split"},
+		if(bam & bamInsertSize){"-pc"},
 		inputarg,
 		bedFiles,
 		pipes,

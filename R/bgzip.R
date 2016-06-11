@@ -1,5 +1,6 @@
-bgzip <- function( filename, clobber=FALSE ){
-	outname <- paste0(basename(filename),".gz" )
-	system(paste("bgzip -c", if(clobber){"-f"}, filename , ">", outname))
-	return(outname)
+bgzip <- function( filenames, clobber=FALSE, threads=getOption("threads",1L) ){
+	outnames <- paste0(basename(filenames),".gz" )
+	cmdString <- paste("bgzip -c", if(clobber){"-f"}, filenames , ">", outnames)
+	res <- cmdRun(cmdString, threads=threads)
+	return(outnames)
 }
