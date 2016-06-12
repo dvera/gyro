@@ -51,7 +51,7 @@ function( read1files, indexfile , read2files=NULL,threads=getOption("threads",1L
 		)
 	}
 
-	res <- cmdRun(cmdSring,threads=1)
+	res <- cmdRun(cmdString,threads=1)
 
 	return(outnames)
 
