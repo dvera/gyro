@@ -1,11 +1,24 @@
 #@param
 
 cutadapt <-
-function( fastq1 , fastq2=NULL , adapter = "AGATCGGAA" , qualityCutoff=0 , minLength = 0 , minOverlap=1  , clipFromStart=NULL , clipFromEnd=NULL , threads=getOption("threads",1L) ){
+function( fastq1 , fastq2=NULL , adapter = "AGATCGGAAGAGCACACGTCTG" , qualityCutoff=0 , minLength = 0 , minOverlap=1  , clipFromStart=NULL , clipFromEnd=NULL , threads=getOption("threads",1L) ){
 
-  if( minLength>0 | qualityCutoff>0){filt=TRUE}else{filt=FALSE}
+  # check if filtering is done
+  if( minLength>0){
+    filt=TRUE
+  } else{
+    filt=FALSE
+  }
 
+  # check if input is paired-end reads
+  if(is.null(fastq2)){
+    paired=FALSE
+  } else{
+    if(length(fastq1) != length(fastq2)){stop("mate pair mismatch")}
+    paired=TRUE
+  }
 
+  # set output names
   if( all(file_ext(fastq1)=="gz") & all(file_ext(removeext(fastq1))=="fastq")){
     outnamesLeft1<-paste0(basename(removeext(removeext(fastq1))),"_clip_tmp.fastq")
     outnamesRight1<-paste0(basename(removeext(removeext(fastq2))),"_clip_tmp.fastq")
@@ -21,8 +34,7 @@ function( fastq1 , fastq2=NULL , adapter = "AGATCGGAA" , qualityCutoff=0 , minLe
   }
 
 
-
-  if(filt){
+  if(filt & paired){
 
     cmdString1<-paste(
       "cutadapt",
@@ -31,7 +43,7 @@ function( fastq1 , fastq2=NULL , adapter = "AGATCGGAA" , qualityCutoff=0 , minLe
       if(!is.null(clipFromEnd)){"-u"},
       if(!is.null(clipFromEnd)){-abs(clipFromEnd)},
       "-O",minOverlap,
-      "-q",qualityCutoff,
+      "-q",paste0(qualityCutoff,",",qualityCutoff),
       "-a",adapter,
       "-A",adapter,
       "-m",minLength,
@@ -66,12 +78,14 @@ function( fastq1 , fastq2=NULL , adapter = "AGATCGGAA" , qualityCutoff=0 , minLe
       if(!is.null(clipFromEnd)){"-u"},
       if(!is.null(clipFromEnd)){-abs(clipFromEnd)},
       "-a",adapter,
-      if(!is.null(fastq2)){paste("-A",adapter)},
+      if(paired){paste("-A",adapter)},
+      "-q",qualityCutoff,
+      "-O",minOverlap,
       "-m",minLength,
       "-o",outnamesLeft2,
-      if(!is.null(fastq2)){paste("-p",outnamesRight2)},
+      if(paired){paste("-p",outnamesRight2)},
       fastq1,
-      if(!is.null(fastq2)){fastq2},
+      if(paired){fastq2},
       ">",logNames
     )
   }
@@ -80,6 +94,10 @@ function( fastq1 , fastq2=NULL , adapter = "AGATCGGAA" , qualityCutoff=0 , minLe
 
   unlink(c(outnamesLeft1,outnamesRight1))
 
-  return(list(outnamesLeft2,outnamesRight2))
+  if(paired){
+    return(list(outnamesLeft2,outnamesRight2))
+  } else{
+    return(outnamesLeft2)
+  }
 
 }

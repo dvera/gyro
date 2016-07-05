@@ -11,5 +11,5 @@ function( bamFiles , threads=getOption("threads",1L) ){
 	cmdString <- paste("samtools index",bamFiles)
 
 	res <- cmdRun(cmdString,threads)
-
+        return(bamFiles)
 }

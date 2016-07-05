@@ -2,7 +2,7 @@
 #'
 #' \code{bedtoolsGenomeCov} is a wrapper for \code{bedtools genomecov -bg}.
 #'
-#' @param bedFiles A character vector of paths to bed files.
+#' @param intervalFiles A character vector of paths to bed files.
 #' @param windowfile A string specifying the path to the bed file within which to calculate coverage of beds.
 #' @param windowsize Positive integer indicating size of windows used to resize overlapping windows to comply with bedGraph format restriction against overlapping intervals. This only needs to be specified if windows are overlapping and a bedGraph-compliant file is desired.
 #' @param stepsize Positive integer indicating size of the steps used to resize overlapping windows to comply with bedGraph format restriction against overlapping intervals. This only needs to be specified if windows are overlapping and a bedGraph-compliant file is desired.
@@ -10,7 +10,7 @@
 #' @param threads A positive integer specifying how many samples to process simultaneously.
 
 bedtoolsGenomeCov <-
-function( bedFiles, chromsizes , covmode="-bg" , scalar="rpm", bam=FALSE, blocks=FALSE , pairedBamCoverage=FALSE , threads=getOption("threads",1L) ){
+function( intervalFiles, chromsizes , covmode="-bg" , scalar="rpm", blocks=FALSE , pairedBamCoverage=FALSE , threads=getOption("threads",1L) ){
 
 	if(missing(chromsizes)){
 		chromsizes<-getOption("chromsizes",NULL)
@@ -20,28 +20,34 @@ function( bedFiles, chromsizes , covmode="-bg" , scalar="rpm", bam=FALSE, blocks
 		stop("chromsizes file does not exist")
 	}
 
-	options(scipen=9999)
-	outnames<-paste0(basename(removeext(bedFiles)),".bg")
+	exts <- file_ext(intervalFiles)
+	if(length(unique(exts))>1){stop("can only handle one file type at a time")}
 
-	if(scalar=="rpm" & bam == FALSE){scalar<-1000000/filelines(bedFiles)}
-	if(scalar=="rpm" & bam == TRUE){scalar<-1000000/samtoolsView(bedFiles,count=T)}
+	bam <- exts[1] == "bam"
+
+	options(scipen=9999)
+
+	outnames<-paste0(basename(removeext(intervalFiles)),".bg")
+
+	if(scalar=="rpm" & bam == FALSE){mf<-1000000/filelines(intervalFiles,threads=threads)}
+	if(scalar=="rpm" & bam == TRUE){mf<-1000000/samtoolsView(intervalFiles,threads=threads,count=T)}
 
 	if(covmode=="-d"){pipes<-"| awk '{print $1,$2,$2+1,$3}' OFS='\t'"}
 	if(covmode=="-dz"){pipes<-"| awk '{print $1,$2+1,$2+2,$3}' OFS='\t'"}
 	if(covmode=="-bg"){pipes<-""}
 
 
-	if(bam==TRUE){inputarg="-ibam"} else{inputarg="-i"}
+	if(bam){inputarg="-ibam"} else{inputarg="-i"}
 
 	cmdString<-paste(
 		"bedtools genomecov",
 		covmode,
 		"-g",chromsizes,
-		"-scale",scalar,
+		"-scale",mf,
 		if(blocks){"-split"},
 		if(bam & pairedBamCoverage){"-pc"},
 		inputarg,
-		bedFiles,
+		intervalFiles,
 		pipes,
 		">",outnames
 	)
