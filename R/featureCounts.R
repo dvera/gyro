@@ -1,4 +1,4 @@
-featureCounts <- function( alignments , annotation , outname , pairCounts=FALSE , pairInsertRange=NULL , pairAlignmentRequired=FALSE , minQual=0 , stranded=0, promiscuousReads=FALSE , ignoreDup=FALSE , featureType="exon" , groupBy="genes" , groupByFeature=FALSE, threads=getOption("threads",1L) ){
+featureCounts <- function( alignments , annotation , outname , pairCounts=FALSE , pairInsertRange=NULL , pairAlignmentRequired=FALSE , minQual=0 , stranded=0, promiscuousReads=FALSE , ignoreDup=FALSE , featureType="exon" , groupBy="gene_name" , groupByFeature=FALSE, threads=getOption("threads",1L) ){
 
 
   cmdString <- paste(
