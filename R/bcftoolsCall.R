@@ -12,7 +12,7 @@ bcftoolsCall <- function( bcfFiles , outputType="v" , consensusCaller=TRUE , mul
       regionString <- paste( "-r", regions )
       if(length(regions)==1){
         regionSuffix <- gsub( ":", "-", regions )
-        regionSuffix <- gsub( ",", "", regions )
+        regionSuffix <- gsub( ",", "", regionSuffix )
       } else{
         regionSuffix <- "Regions"
       }
@@ -29,7 +29,7 @@ bcftoolsCall <- function( bcfFiles , outputType="v" , consensusCaller=TRUE , mul
       if(multiAllelicCaller){"m"},
       sep="_"
     ),
-    if(!is.null(regions)){"regionSuffix"},
+    if(!is.null(regions)){paste0("_",regionSuffix)},
     if(outputType=="b"){".bcf"},
     if(outputType=="v"){".vcf"},
     if(outputType=="u"){".bcf"},
