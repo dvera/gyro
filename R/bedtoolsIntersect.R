@@ -11,7 +11,7 @@
 
 
 bedtoolsIntersect <-
-function( a, b, extraargs="-u", header=TRUE, count=FALSE, sorted=TRUE , threads=getOption("threads",1L) ){
+function( a, b, extraargs="-u", header=TRUE, count=FALSE, sorted=TRUE , split=FALSE , threads=getOption("threads",1L) ){
 
 	bed1name<-basename(removeext(a))
 	bed2name<-basename(removeext(b))
@@ -20,11 +20,11 @@ function( a, b, extraargs="-u", header=TRUE, count=FALSE, sorted=TRUE , threads=
 	outname<-paste0(bed1name,"_x_",bed2name,".",ext)
 
 	if(count){
-		cmdString<-paste("bedtools intersect",if(sorted){"-sorted"},extraargs,if(header){"-header"},"-a",a,"-b",b,"| wc -l")
+		cmdString<-paste("bedtools intersect",if(sorted){"-sorted"},extraargs,if(header){"-header"},if(split){"-split"},"-a",a,"-b",b,"| wc -l")
 		res <- cmdRun(cmdString, threads, intern=TRUE)
 		return(res)
 	} else{
-		cmdString<-paste("bedtools intersect",if(sorted){"-sorted"},extraargs,if(header){"-header"},"-a",a,"-b",b,">",outname)
+		cmdString<-paste("bedtools intersect",if(sorted){"-sorted"},extraargs,if(header){"-header"},if(split){"-split"},"-a",a,"-b",b,">",outname)
 		res <- cmdRun(cmdString, threads)
 		return(outname)
 	}
