@@ -1,4 +1,4 @@
-samtoolsView <- function( inFiles , outnames = NA , regions=NULL , genome.chrom.sizes=NULL , includeFlag=NULL , excludeFlag=NULL , minQual=NULL , outputBam=TRUE , includeHeader=FALSE , postsort=FALSE , count=FALSE , threads=getOption("threads",1L) ){
+samtoolsView <- function( inFiles , outnames = NA , regions=NULL , genome.chrom.sizes=NULL , includeFlag=NULL , excludeFlag=NULL , minQual=NULL , outputBam=TRUE , includeHeader=FALSE , postsort=FALSE , count=FALSE , memory=NULL , threads=getOption("threads",1L) ){
 
   if(includeHeader & is.null(genome.chrom.sizes)){stop("must specify genome.chrom.sizes of includeHeader is TRUE")}
 
@@ -52,9 +52,11 @@ samtoolsView <- function( inFiles , outnames = NA , regions=NULL , genome.chrom.
     if( !is.null(regions) & !oneRegion ){ paste( regionString ) },
     inFiles,
     if( oneRegion ){ theRegion },
-    if( postsort ){ paste( "| samtools sort -T",outnames,"-o",outnames,if(outputBam){paste("-O bam")} else{paste("-O sam")},"-" ) },
+    if( postsort ){ paste( "| samtools sort -T",outnames,"-o",outnames,if(outputBam){paste("-O bam")} else{paste("-O sam")},if( !is.null(memory) ){ paste( "-m" , memory ) },"-" ) },
     if(!count){paste(">", outnames)} else{}
   )
+    
+    
 
   # print and execute command string
   res <- cmdRun(cmdString,threads,intern=if(count){TRUE}else{FALSE})
