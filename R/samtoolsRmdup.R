@@ -1,4 +1,4 @@
-samtoolsRmdup <- function( inFiles , singleEnd=FALSE , pairedAsSingle=FALSE , outputFormat="BAM"threads=getOption("threads",1L) ){
+samtoolsRmdup <- function( inFiles , singleEnd=FALSE , pairedAsSingle=FALSE , outputFormat="BAM",threads=getOption("threads",1L) ){
   
   # generate output file names
   outnames <- paste0(
