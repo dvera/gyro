@@ -15,7 +15,7 @@ samtoolsRmdup <- function( inFiles , singleEnd=FALSE , pairedAsSingle=FALSE , ou
     if( pairedAsSingle ){ "-S" },
     if( singleEnd ){ "-s" },
     inFiles,
-    ">", outnames
+    outnames
   )
     
   # print and execute command string
