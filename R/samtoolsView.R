@@ -1,4 +1,4 @@
-samtoolsView <- function( inFiles , outnames = NA , regions=NULL , genome.chrom.sizes=NULL , includeFlag=NULL , excludeFlag=NULL , minQual=NULL , outputBam=TRUE , includeHeader=FALSE , postsort=FALSE , count=FALSE , memory=NULL , threads=getOption("threads",1L) ){
+samtoolsView <- function( inFiles , outnames = NA , regions=NULL , genome.chrom.sizes=NULL , includeFlag=NULL , excludeFlag=NULL , minQual=NULL , outputBam=TRUE , includeHeader=FALSE , postsort=FALSE , count=FALSE , sample=NULL , memory=NULL , threads=getOption("threads",1L) ){
 
   if(includeHeader & is.null(genome.chrom.sizes)){stop("must specify genome.chrom.sizes of includeHeader is TRUE")}
 
@@ -18,6 +18,7 @@ samtoolsView <- function( inFiles , outnames = NA , regions=NULL , genome.chrom.
     oneRegion=FALSE
   }
 
+  
   # generate output file names
   if(is.na(outnames)){
     outnames <- paste0(
@@ -29,6 +30,8 @@ samtoolsView <- function( inFiles , outnames = NA , regions=NULL , genome.chrom.
       if( !is.null(excludeFlag) ){ "_F" },
       if( !is.null(excludeFlag) ){ excludeFlag },
       if( !is.null(regions) ){ regionSuffix },
+      if( !is.null(sample) ){ "_sample" },
+      if( !is.null(sample) ){ gsub("\\.","-",sample) },
       if( includeHeader){"_reheader" },
       if( postsort ){ "_psort" },
       if( outputBam){ ".bam" } else{ ".sam" }
@@ -39,7 +42,7 @@ samtoolsView <- function( inFiles , outnames = NA , regions=NULL , genome.chrom.
     if( length(outnames) != length(inFiles) ){ stop( "lengths of inFiles and outnames must be equal" ) }
   }
 
-  # generate command string
+   # generate command string
   cmdString <- paste(
     "samtools view",
     if( outputBam ){ "-b" },
@@ -50,6 +53,7 @@ samtoolsView <- function( inFiles , outnames = NA , regions=NULL , genome.chrom.
     if( !is.null(includeFlag) ){ paste( "-f" , includeFlag ) },
     if( !is.null(excludeFlag) ){ paste( "-F" , excludeFlag ) },
     if( !is.null(regions) & !oneRegion ){ paste( regionString ) },
+    if( !is.null(sample) ){ paste(" -s", sample )},
     inFiles,
     if( oneRegion ){ theRegion },
     if( postsort ){ paste( "| samtools sort -T",outnames,"-o",outnames,if(outputBam){paste("-O bam")} else{paste("-O sam")},if( !is.null(memory) ){ paste( "-m" , memory ) },"-" ) },
